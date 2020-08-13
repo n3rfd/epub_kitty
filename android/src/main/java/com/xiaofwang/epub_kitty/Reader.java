@@ -37,7 +37,7 @@ public class Reader  implements OnHighlightListener, ReadLocatorListener, FolioR
     private static final String PAGE_CHANNEL = "com.xiaofwang.epub_reader/page";
 
     Reader(Context context, BinaryMessenger messenger,ReaderConfig config){
-
+        this.context = context;
         readerConfig = config;
         getHighlightsAndSave();
 
@@ -46,7 +46,6 @@ public class Reader  implements OnHighlightListener, ReadLocatorListener, FolioR
                 .setReadLocatorListener(this)
                 .setOnClosedListener(this);
 
-        this.context = context;
         setPageHandler(messenger);
     }
 
