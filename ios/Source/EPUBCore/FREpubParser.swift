@@ -5,7 +5,6 @@
 //  Created by Heberti Almeida on 04/05/15.
 //  Copyright (c) 2015 Folio Reader. All rights reserved.
 //
-
 import UIKit
 import AEXML
 #if COCOAPODS
@@ -70,8 +69,6 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         return authorName
     }
 
-    /// we can not read epub file directly, but we read epub unzip file
-    ///
     /// Unzip, delete and read an epub file.
     ///
     /// - Parameters:
@@ -87,17 +84,12 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         var isDir: ObjCBool = false
         let fileManager = FileManager.default
         let bookName = withEpubPath.lastPathComponent
-        
-        //this path is unzip path,not primrity epub path
         var bookBasePath = ""
 
         if let path = unzipPath, fileManager.fileExists(atPath: path) {
             bookBasePath = path
         } else {
-            
-            //instead document of cache
-           // bookBasePath = kApplicationDocumentsDirectory
-            bookBasePath = kApplicationCacheDirectory.appendingPathComponent(kEpubFileDirectory)
+            bookBasePath = kApplicationDocumentsDirectory
         }
 
         bookBasePath = bookBasePath.appendingPathComponent(bookName)
@@ -106,10 +98,9 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             throw FolioReaderError.bookNotAvailable
         }
 
-        // Unzip if necessary (it means the file dose not exist, if it has unziped once, the result is false)
+        // Unzip if necessary
         let needsUnzip = !fileManager.fileExists(atPath: bookBasePath, isDirectory:&isDir) || !isDir.boolValue
 
-        // if unzip, the name is same as before,but it different things, such as 3.epub before is epub,after is dir
         if needsUnzip {
             SSZipArchive.unzipFile(atPath: withEpubPath, toDestination: bookBasePath, delegate: self)
         }
@@ -367,7 +358,6 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     }
 
     // MARK: - Recursive add items to a list
-
     var flatTOC: [FRTocReference] {
         var tocItems = [FRTocReference]()
 
@@ -491,7 +481,6 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     }
 
     // MARK: - SSZipArchive delegate
-
     func zipArchiveWillUnzipArchive(atPath path: String, zipInfo: unz_global_info) {
         guard shouldRemoveEpub else { return }
         guard let epubPathToRemove = epubPathToRemove else { return }
