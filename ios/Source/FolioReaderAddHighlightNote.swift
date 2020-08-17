@@ -4,7 +4,6 @@
 //
 //  Created by ShuichiNagao on 2018/05/06.
 //
-
 import UIKit
 import RealmSwift
 
@@ -67,7 +66,7 @@ class FolioReaderAddHighlightNote: UIViewController {
         
         if !highlightSaved && !isEditHighlight {
             guard let currentPage = folioReader.readerCenter?.currentPage else { return }
-            currentPage.webView?.js("removeThisHighlight()")
+            currentPage.webView?.js("removeThisHighlight()") { _ in }
         }
     }
     
@@ -97,7 +96,6 @@ class FolioReaderAddHighlightNote: UIViewController {
         textView.delegate = self
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.textColor = .black
-        textView.backgroundColor = .clear
         textView.font = UIFont.boldSystemFont(ofSize: 15)
         containerView.addSubview(textView)
         
@@ -109,6 +107,7 @@ class FolioReaderAddHighlightNote: UIViewController {
         let rightConstraint = NSLayoutConstraint(item: textView!, attribute: .right, relatedBy: .equal, toItem: containerView, attribute: .right, multiplier: 1.0, constant: -20)
         let topConstraint = NSLayoutConstraint(item: textView, attribute: .top, relatedBy: .equal, toItem: containerView, attribute: .top, multiplier: 1, constant: 100)
         let heiConstraint = NSLayoutConstraint(item: textView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: view.frame.height - 100)
+        
         containerView.addConstraints([leftConstraint, rightConstraint, topConstraint, heiConstraint])
     }
     
@@ -130,7 +129,7 @@ class FolioReaderAddHighlightNote: UIViewController {
     }
     
     private func configureNavBar() {
-        let navBackground = folioReader.isNight(self.readerConfig.nightModeNavBackground, self.readerConfig.daysModeNavBackground)
+        let navBackground = folioReader.isNight(readerConfig.nightModeMenuBackground, UIColor.white)
         let tintColor = readerConfig.tintColor
         let navText = folioReader.isNight(UIColor.white, UIColor.black)
         let font = UIFont(name: "Avenir-Light", size: 17)!
