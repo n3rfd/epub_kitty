@@ -5,10 +5,12 @@
 //  Created by Heberti Almeida on 08/04/15.
 //  Copyright (c) 2015 Folio Reader. All rights reserved.
 //
+
 import Foundation
 import UIKit
 
 // MARK: - Internal constants
+
 internal let kApplicationDocumentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
 internal let kCurrentFontFamily = "com.folioreader.kCurrentFontFamily"
 internal let kCurrentFontSize = "com.folioreader.kCurrentFontSize"
@@ -146,6 +148,7 @@ open class FolioReader: NSObject {
 }
 
 // MARK: - Present FolioReader
+
 extension FolioReader {
 
     /// Present a Folio Reader Container modally on a Parent View Controller.
@@ -167,6 +170,7 @@ extension FolioReader {
 }
 
 // MARK: -  Getters and setters for stored values
+
 extension FolioReader {
 
     public func register(defaults: [String: Any]) {
@@ -181,7 +185,7 @@ extension FolioReader {
 
             if let readerCenter = self.readerCenter {
                 UIView.animate(withDuration: 0.6, animations: {
-                    _ = readerCenter.currentPage?.webView?.js("nightMode(\(self.nightMode))") { _ in }
+                    _ = readerCenter.currentPage?.webView?.js("nightMode(\(self.nightMode))")
                     readerCenter.pageIndicatorView?.reloadColors()
                     readerCenter.configureNavBar()
                     readerCenter.scrollScrubber?.reloadColors()
@@ -206,7 +210,7 @@ extension FolioReader {
         }
         set (font) {
             self.defaults.set(font.rawValue, forKey: kCurrentFontFamily)
-            _ = self.readerCenter?.currentPage?.webView?.js("setFontName('\(font.cssIdentifier)')") { _ in }
+            _ = self.readerCenter?.currentPage?.webView?.js("setFontName('\(font.cssIdentifier)')")
         }
     }
 
@@ -228,7 +232,7 @@ extension FolioReader {
                 return
             }
 
-            currentPage.webView?.js("setFontSize('\(currentFontSize.cssIdentifier)')") { _ in }
+            currentPage.webView?.js("setFontSize('\(currentFontSize.cssIdentifier)')")
         }
     }
 
@@ -303,10 +307,12 @@ extension FolioReader {
 }
 
 // MARK: - Metadata
+
 extension FolioReader {
 
     // TODO QUESTION: The static `getCoverImage` function used the shared instance before and ignored the `unzipPath` parameter.
     // Should we properly implement the parameter (what has been done now) or should change the API to only use the current FolioReader instance?
+
     /**
      Read Cover Image and Return an `UIImage`
      */
@@ -324,6 +330,7 @@ extension FolioReader {
 }
 
 // MARK: - Exit, save and close FolioReader
+
 extension FolioReader {
 
     /// Save Reader state, book, page and scroll offset.

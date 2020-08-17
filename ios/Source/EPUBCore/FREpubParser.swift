@@ -5,6 +5,7 @@
 //  Created by Heberti Almeida on 04/05/15.
 //  Copyright (c) 2015 Folio Reader. All rights reserved.
 //
+
 import UIKit
 import AEXML
 #if COCOAPODS
@@ -358,6 +359,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     }
 
     // MARK: - Recursive add items to a list
+
     var flatTOC: [FRTocReference] {
         var tocItems = [FRTocReference]()
 
@@ -481,6 +483,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     }
 
     // MARK: - SSZipArchive delegate
+
     func zipArchiveWillUnzipArchive(atPath path: String, zipInfo: unz_global_info) {
         guard shouldRemoveEpub else { return }
         guard let epubPathToRemove = epubPathToRemove else { return }
