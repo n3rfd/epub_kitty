@@ -467,7 +467,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         }
         
         // Inject viewport
-        let viewportTag = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, shrink-to-fit=no\">"
+        let viewportTag = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, shrink-to-fit=no\">function p(s){let a = $('#player')[0];a.setAttribute('src',s);a.load();a.play();$(a).show();}"
 
         let toInject = "\n\(viewportTag)\n</head>"
         html = html.replacingOccurrences(of: "</head>", with: toInject)
@@ -491,8 +491,22 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             html = modifiedHtmlContent
         }
 
-        // 1. parse
-        let doc: Document = try SwiftSoup.parse(html)
+        let doc: Document = try SwiftSoup.parse(html, "", Parser.xmlParser())
+        let audios: Elements = try doc.getElementsByTag("audio")
+        if (audios.count > 0) {
+            let rects: Elements = doc.getElementsByTag("rect")
+            for i in 0..<rects.count {
+                let src = audios.get(i).attr("src")
+                rects.get(i).attr("onclick", "p('\(src)')")
+            }
+
+            if (rects.count > 0) {
+                doc.getElementsByTag("body").append("<audio id=\"player\" controls=\"controls\" style=\"width:100%; " +
+                        "margin: 0 auto;display: table;\"" + "\n</body>");
+            }
+
+            html = doc.html()
+        }
 
         cell.loadHTMLString(html, baseURL: URL(fileURLWithPath: resource.fullHref.deletingLastPathComponent))
         return cell
