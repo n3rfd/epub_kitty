@@ -491,6 +491,9 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             html = modifiedHtmlContent
         }
 
+        // 1. parse
+        let doc: Document = try SwiftSoup.parse(html)
+
         cell.loadHTMLString(html, baseURL: URL(fileURLWithPath: resource.fullHref.deletingLastPathComponent))
         return cell
     }
